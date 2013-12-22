@@ -1,0 +1,1 @@
+/home/tim/.vim/nix.vim
