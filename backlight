@@ -1,0 +1,25 @@
+#!/bin/sh
+bl_dev=/sys/class/backlight/gmux_backlight
+read bl_max < $bl_dev/max_brightness
+read bl_current < $bl_dev/brightness
+step=100
+
+case $1 in
+    -) 
+        if [ $bl_current -ge 0 ] 
+        then
+            echo $(($(< $bl_dev/brightness) - $step)) > $bl_dev/brightness
+            logger "ACPI Backlight Down"
+        else
+            logger "ACPI Backlight At Min"
+        fi
+    ;;
+    +)  if [ $bl_current -le $bl_max ] 
+        then
+            echo $(($(< $bl_dev/brightness) + $step)) > $bl_dev/brightness
+            logger "ACPI Backlight Up"
+        else
+            logger "ACPI Backlight At Max"
+        fi
+    ;;
+esac
